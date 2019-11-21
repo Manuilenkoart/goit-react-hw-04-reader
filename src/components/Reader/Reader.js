@@ -13,6 +13,17 @@ export default class Reader extends Component {
     history: PropTypes.shape().isRequired,
   };
 
+  componentDidMount() {
+    const { items, history, location } = this.props;
+    const pageNumber = this.getUrl();
+    if (pageNumber <= 0 && pageNumber >= items.length) {
+      history.push({
+        ...location,
+        search: `item=1`,
+      });
+    }
+  }
+
   getUrl = () => {
     let url = new URLSearchParams(this.props.location.search).get('item');
     url = Number(url);
@@ -40,7 +51,7 @@ export default class Reader extends Component {
 
     return (
       <>
-        {pageNumber >= 1 && pageNumber <= items.length && (
+        {pageNumber > 0 && pageNumber <= items.length && (
           <div className={styles.reader}>
             <Controls
               onIncrement={this.handleIncrement}
