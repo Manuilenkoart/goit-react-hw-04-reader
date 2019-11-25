@@ -15,11 +15,13 @@ export default class Reader extends Component {
 
   componentDidMount() {
     const { items, history, location } = this.props;
+
     const pageNumber = this.getUrl();
-    if (pageNumber <= 0 && pageNumber >= items.length) {
-      history.push({
-        ...location,
-        search: `item=1`,
+
+    if (!pageNumber || pageNumber > items.length) {
+      history.replace({
+        ...location.pathname,
+        search: 'item=1',
       });
     }
   }
@@ -30,10 +32,10 @@ export default class Reader extends Component {
     return url;
   };
 
-  onPageChange = category => {
+  onPageChange = itemNumber => {
     this.props.history.push({
-      ...this.props.location,
-      search: `item=${category}`,
+      ...this.props.location.pathname,
+      search: `item=${itemNumber}`,
     });
   };
 
